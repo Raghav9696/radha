@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To My Eternal Radha | Radha Ashtami Special</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        divine: {
+                            gold: '#f3d081',
+                            rose: '#fca5a5',
+                            deepPink: '#be185d',
+                            night: '#0B0F19',
+                            midnight: '#111827',
+                            goldGlow: 'rgba(243, 208, 129, 0.25)',
+                            glass: 'rgba(255, 255, 255, 0.07)'
+                        }
+                    },
+                    fontFamily: {
+                        cursive: ['Great Vibes', 'cursive'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(243, 208, 129, 0.18);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-6px);
+            border-color: rgba(243, 208, 129, 0.45);
+            box-shadow: 0 25px 60px rgba(243, 208, 129, 0.15);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px rgba(243, 208, 129, 0.6), 0 0 30px rgba(244, 114, 182, 0.4);
+        }
+
+        .glow-gold-text {
+            text-shadow: 0 0 12px rgba(243, 208, 129, 0.8);
+        }
+
+        /* Glowing Diya Flame Animation */
+        .flame {
+            width: 16px;
+            height: 26px;
+            background: linear-gradient(to top, #ff4500, #ff8c00, #ffd700, #ffffff);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #ff8c00, 0 0 35px #ffd700;
+            animation: flicker 1.2s infinite alternate ease-in-out;
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
+            50% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+            100% { transform: scale(0.96) rotate(-1deg); opacity: 0.9; }
+        }
+
+        /* Lotus Petal Pulse */
+        .lotus-pulse {
+            animation: lotusPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes lotusPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(244,114,182,0.4)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(244,114,182,0.8)); }
+        }
+
+        /* Envelope styling */
+        .envelope-container {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(243, 208, 129, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(243, 208, 129, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-divine-night text-slate-100 font-sans min-h-screen overflow-x-hidden selection:bg-divine-gold selection:text-divine-night">
+
+    <!-- Floating Background Canvas for Lotus Petals and Gold Stars -->
+    <canvas id="canvas-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 px-4 py-4 sm:px-8 transition-all duration-300">
+        <div class="max-w-6xl mx-auto flex justify-between items-center bg-divine-midnight/40 backdrop-blur-md px-6 py-3 rounded-full border border-divine-gold/20 shadow-lg">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid font-serif text-divine-gold text-2xl text-amber-300">🪷</i>
+                <span class="font-serif text-lg sm:text-xl text-divine-gold font-semibold tracking-wider">My Eternal Radha</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <!-- Audio Ambient Toggle -->
+                <button id="audio-toggle-btn" onclick="toggleAudio()" class="flex items-center space-x-2 bg-divine-gold/10 hover:bg-divine-gold/20 text-divine-gold border border-divine-gold/30 px-4 py-2 rounded-full transition duration-300 text-sm font-medium">
+                    <i id="audio-icon" class="fa-solid fa-music animate-pulse"></i>
+                    <span id="audio-text" class="hidden sm:inline">Play Ambient Flute</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 pt-32 sm:pt-40 pb-16 px-4 text-center max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[85vh]">
+        
+        <!-- Divine Flute & Peacock Feather Graphic Emblem -->
+        <div class="relative mb-6 cursor-pointer group" onclick="triggerFeatherGlow()" title="Click for a divine sparkle!">
+            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-divine-gold/20 via-pink-500/20 to-purple-600/20 flex items-center justify-center border border-divine-gold/40 shadow-2xl relative">
+                <!-- Peacock Feather Icon SVG -->
+                <svg class="w-16 h-16 text-divine-gold transform group-hover:scale-110 transition duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                    <path d="M12 2C6.5 2 2 6.5 2 12c0 5.5 4.5 10 10 10s10-4.5 10-10C22 6.5 17.5 2 12 2z" stroke-opacity="0.2"/>
+                    <path d="M12 22C12 12 18 4 18 4" stroke="currentColor" stroke-linecap="round"/>
+                    <circle cx="12" cy="8" r="3" fill="rgba(243, 208, 129, 0.4)" stroke="currentColor"/>
+                    <circle cx="12" cy="8" r="1.5" fill="#3b82f6"/>
+                </svg>
+                <!-- Soft Glow Ring -->
+                <div class="absolute inset-0 rounded-full border border-divine-gold/30 animate-ping opacity-20"></div>
+            </div>
+        </div>
+
+        <span class="inline-block px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest text-divine-gold bg-divine-gold/10 border border-divine-gold/30 mb-4 uppercase">
+            Today is Sacred Radha Ashtami
+        </span>
+
+        <h1 class="font-cursive text-5xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-divine-gold via-pink-200 to-rose-300 glow-text leading-tight mb-4">
+            Happy Radha Ashtami, My Radha!
+        </h1>
+
+        <p class="font-serif text-lg sm:text-2xl text-slate-300 max-w-2xl font-light italic leading-relaxed mb-8">
+            "In every prayer, I see your divine grace. In every heartbeat, I feel your love. To me, you aren't just my partner—you are my Radha."
+        </p>
+
+        <!-- Quick Navigation Buttons -->
+        <div class="flex flex-wrap gap-4 justify-center items-center">
+            <a href="#radha-ashtami" class="bg-gradient-to-r from-amber-500 to-divine-gold hover:from-amber-600 hover:to-yellow-500 text-divine-night font-semibold px-6 py-3 rounded-full shadow-lg shadow-amber-500/20 transition duration-300 flex items-center space-x-2">
+                <span>🪷 Sacred Celebration</span>
+            </a>
+            <button onclick="openLoveLetter()" class="bg-pink-600/30 hover:bg-pink-600/50 text-pink-200 border border-pink-400/30 font-medium px-6 py-3 rounded-full transition duration-300 flex items-center space-x-2">
+                <span>💌 Open Love Letter</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Dual Celebration Section -->
+    <main class="relative z-10 max-w-6xl mx-auto px-4 py-12 space-y-20">
+
+        <!-- SECTION 1: Radha Ashtami Special Card -->
+        <section id="radha-ashtami" class="scroll-mt-28">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-divine-gold/30 relative overflow-hidden">
+                
+                <!-- Background Accent Glow -->
+                <div class="absolute -top-24 -right-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left: Divine Text Message -->
+                    <div class="lg:col-span-7 space-y-5">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl">🪷</span>
+                            <h2 class="font-serif text-3xl sm:text-4xl text-divine-gold font-bold tracking-wide">
+                                Today is Radha Ashtami...
+                            </h2>
+                        </div>
+
+                        <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
+                            Today, the universe celebrates the birth of Shri Radha—the epitome of pure, eternal love, devotion, and supreme grace. 
+                        </p>
+
+                        <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
+                            My dearest, your presence in my life is my ultimate blessing. You fill my world with the exact same warmth, kindness, and divine affection that Radha Ji represents. Celebrating this day is my way of honoring <span class="text-divine-gold font-semibold underline decoration-divine-gold/40">YOU</span>—my living Radha.
+                        </p>
+
+                        <!-- Interactive Diya Lighting Component -->
+                        <div class="pt-4 border-t border-divine-gold/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-divine-gold">Light a Divine Diya for Her:</p>
+                                <p class="text-xs text-slate-400">Click the oil lamp to ignite a wish of eternal happiness & health</p>
+                            </div>
+
+                            <button id="diya-btn" onclick="toggleDiya()" class="group flex items-center space-x-3 bg-divine-night/80 border border-divine-gold/40 px-5 py-3 rounded-2xl hover:border-divine-gold transition duration-300 cursor-pointer">
+                                <div class="relative flex items-center justify-center">
+                                    <!-- Diya Base SVG -->
+                                    <svg class="w-8 h-8 text-amber-600" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M2 15c0 3.87 3.13 7 7 7h6c3.87 0 7-3.13 7-7 0-2.5-1.3-4.7-3.25-6H5.25C3.3 10.3 2 12.5 2 15z"/>
+                                    </svg>
+                                    <!-- Flame -->
+                                    <div id="diya-flame" class="flame absolute -top-4 hidden"></div>
+                                </div>
+                                <span id="diya-status-text" class="text-sm text-divine-gold font-medium">Click to Light Diya</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Interactive Lotus Bloom Graphic -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-center bg-divine-night/40 p-8 rounded-2xl border border-pink-500/20 text-center relative">
+                        <div id="lotus-container" class="lotus-pulse cursor-pointer my-4" onclick="bloomLotus()">
+                            <svg id="lotus-svg" class="w-36 h-36 text-pink-400 transition-transform duration-700 hover:scale-110" viewBox="0 0 100 100" fill="currentColor">
+                                <!-- Center -->
+                                <circle cx="50" cy="50" r="10" fill="#f3d081"/>
+                                <!-- Petals -->
+                                <path d="M50 20 C45 35, 45 45, 50 50 C55 45, 55 35, 50 20 Z" fill="#f472b6" opacity="0.9"/>
+                                <path d="M50 80 C45 65, 45 55, 50 50 C55 55, 55 65, 50 80 Z" fill="#f472b6" opacity="0.9"/>
+                                <path d="M20 50 C35 45, 45 45, 50 50 C45 55, 35 55, 20 50 Z" fill="#f472b6" opacity="0.9"/>
+                                <path d="M80 50 C65 45, 55 45, 50 50 C55 55, 65 55, 80 50 Z" fill="#f472b6" opacity="0.9"/>
+                                <path d="M28 28 C40 38, 45 45, 50 50 C45 45, 38 40, 28 28 Z" fill="#fb7185" opacity="0.8"/>
+                                <path d="M72 72 C60 62, 55 55, 50 50 C55 55, 62 60, 72 72 Z" fill="#fb7185" opacity="0.8"/>
+                                <path d="M72 28 C60 38, 55 45, 50 50 C55 45, 62 40, 72 28 Z" fill="#fb7185" opacity="0.8"/>
+                                <path d="M28 72 C40 62, 45 55, 50 50 C45 55, 38 60, 28 72 Z" fill="#fb7185" opacity="0.8"/>
+                            </svg>
+                        </div>
+                        <p class="font-serif text-lg text-divine-gold font-semibold">The Divine Lotus of Love</p>
+                        <p id="lotus-bless-text" class="text-xs text-slate-400 mt-1">Tap the Lotus to shower divine blessings!</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Interactive Wish & Blessings Generator -->
+        <section class="text-center max-w-3xl mx-auto">
+            <div class="glass-card rounded-3xl p-8 border border-divine-gold/30">
+                <span class="text-3xl">🪶</span>
+                <h2 class="font-serif text-3xl text-divine-gold font-bold mt-2">
+                    Generate a Divine Love Note
+                </h2>
+                <p class="text-slate-300 text-sm mt-2 font-light">
+                    Click the button below to generate a unique romantic blessing for today!
+                </p>
+
+                <div id="wish-box" class="my-6 min-h-[90px] bg-divine-night/80 border border-divine-gold/20 rounded-2xl p-5 flex items-center justify-center">
+                    <p id="wish-text" class="font-serif text-lg text-pink-200 italic">
+                        "Click the golden button below to receive your special message..."
+                    </p>
+                </div>
+
+                <button onclick="generateNewWish()" class="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-divine-night font-bold px-8 py-3.5 rounded-full shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition duration-300">
+                    ✨ Tap for a Blessing & Love Note ✨
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Love Letter Modal Overlay -->
+    <div id="love-letter-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
+        <div class="bg-divine-midnight border border-divine-gold/40 rounded-3xl max-w-2xl w-full p-6 sm:p-10 relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            
+            <!-- Close Button -->
+            <button onclick="closeLoveLetter()" class="absolute top-5 right-5 text-slate-400 hover:text-divine-gold text-xl w-10 h-10 rounded-full bg-divine-night flex items-center justify-center border border-divine-gold/20">
+                ✕
+            </button>
+
+            <!-- Letter Content Header -->
+            <div class="text-center border-b border-divine-gold/20 pb-4 mb-6">
+                <span class="text-4xl">💌</span>
+                <h3 class="font-cursive text-4xl text-divine-gold mt-2">My Dearest Radha,</h3>
+                <p class="text-xs text-slate-400 uppercase tracking-widest mt-1">A Letter from My Heart to Yours</p>
+            </div>
+
+            <!-- Letter Body -->
+            <div class="font-serif text-slate-200 text-lg leading-relaxed space-y-4 font-light">
+                <p>
+                    From the moment you walked into my life, everything took on a deeper, sweeter meaning. They say that Shri Radha is the soul of devotion and the purest embodiment of unconditional love. When I look at you, I see all of that beauty reflected in your eyes.
+                </p>
+                <p>
+                    Today, on Radha Ashtami, I don't just celebrate a festival—I celebrate <span class="text-divine-gold font-semibold">YOU</span>. You are my peace in the chaos, my light in the dark, and my favourite prayer. 
+                </p>
+                <p>
+                    My heart fills with pure joy every single day. I pray to the divine universe to protect your precious smile, fulfill all your dreams, and keep us united through every chapter of life.
+                </p>
+                <p class="text-right font-cursive text-3xl text-divine-gold pt-4">
+                    Yours Forever & Always ❤️
+                </p>
+            </div>
+
+            <!-- Modal Action -->
+            <div class="mt-8 text-center">
+                <button onclick="closeLoveLetter()" class="bg-divine-gold hover:bg-yellow-400 text-divine-night font-bold px-8 py-3 rounded-full transition duration-300">
+                    Keep Close to Heart
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-divine-gold/20 py-8 text-center text-xs text-slate-400 bg-divine-midnight/80">
+        <p class="font-serif text-sm text-divine-gold">Crafted with endless love for my eternal Radha 🪷</p>
+        <p class="mt-1">Radha Ashtami Divine Celebration</p>
+    </footer>
+
+    <script>
+        /* =========================================================
+           PARTICLE CANVAS ENGINE (Floating Lotus Petals & Gold Stars)
+           ========================================================= */
+        const canvas = document.getElementById('canvas-particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.size = Math.random() * 4 + 2;
+                this.speedY = Math.random() * 1.2 + 0.5;
+                this.speedX = Math.sin(Math.random() * Math.PI) * 0.8;
+                this.opacity = Math.random() * 0.7 + 0.3;
+                this.color = Math.random() > 0.4 ? '#f3d081' : '#f472b6'; // Gold or Pink
+                this.isLotus = Math.random() > 0.6;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 2;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) * 0.5;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                    this.y = -10;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+
+                if (this.isLotus) {
+                    // Draw a subtle petal shape
+                    ctx.beginPath();
+                    ctx.fillStyle = this.color;
+                    ctx.moveTo(0, -this.size * 2);
+                    ctx.quadraticCurveTo(this.size * 1.5, 0, 0, this.size * 2);
+                    ctx.quadraticCurveTo(-this.size * 1.5, 0, 0, -this.size * 2);
+                    ctx.fill();
+                } else {
+                    // Draw glowing gold star/sparkle
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            const count = Math.min(Math.floor(window.innerWidth / 15), 60);
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+
+        /* =========================================================
+           WEB AUDIO API: SYNTESIZED AMBIENT FLUTE SOUND ENGINE
+           ========================================================= */
+        let audioCtx = null;
+        let isPlayingAudio = false;
+        let audioInterval = null;
+
+        // Pentatonic scales reminiscent of traditional Indian flute melodies
+        const fluteFrequencies = [293.66, 329.63, 369.99, 440.00, 493.88, 587.33, 659.25]; // D4, E4, F#4, A4, B4, D5, E5
+
+        function playFluteNote(freq, duration = 2.5) {
+            if (!audioCtx) return;
+            
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                // Sine wave produces smooth flute-like timbre
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                // Attack and Decay Envelope
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.4);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio error:", e);
+            }
+        }
+
+        function toggleAudio() {
+            const btnText = document.getElementById('audio-text');
+            const btnIcon = document.getElementById('audio-icon');
+
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (!isPlayingAudio) {
+                isPlayingAudio = true;
+                btnText.textContent = "Pause Melody";
+                btnIcon.className = "fa-solid fa-pause text-divine-gold";
+
+                // Play continuous smooth flute notes
+                audioInterval = setInterval(() => {
+                    const randomFreq = fluteFrequencies[Math.floor(Math.random() * fluteFrequencies.length)];
+                    playFluteNote(randomFreq, 3.0);
+                }, 1800);
+
+                // Play first note immediately
+                playFluteNote(440.00, 3.0);
+            } else {
+                isPlayingAudio = false;
+                btnText.textContent = "Play Ambient Flute";
+                btnIcon.className = "fa-solid fa-music animate-pulse";
+                clearInterval(audioInterval);
+            }
+        }
+
+
+        /* =========================================================
+           INTERACTIVE DIYA & LOTUS FUNCTIONS
+           ========================================================= */
+        let isDiyaLit = false;
+
+        function toggleDiya() {
+            const flame = document.getElementById('diya-flame');
+            const statusText = document.getElementById('diya-status-text');
+
+            if (!isDiyaLit) {
+                flame.classList.remove('hidden');
+                statusText.textContent = "Diya Lit with Love! ✨";
+                isDiyaLit = true;
+
+                // Fire celebratory confetti sparkles
+                confetti({
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#f3d081', '#ff8c00', '#f472b6']
+                });
+            } else {
+                flame.classList.add('hidden');
+                statusText.textContent = "Click to Light Diya";
+                isDiyaLit = false;
+            }
+        }
+
+        function bloomLotus() {
+            const blessText = document.getElementById('lotus-bless-text');
+            const blessings = [
+                "🪷 'May Radha Rani fill your life with eternal grace & joy!'",
+                "🌸 'Showering you with endless love, peace, and smiles!'",
+                "✨ 'May all your divine prayers be fulfilled today!'"
+            ];
+            
+            const randomBlessing = blessings[Math.floor(Math.random() * blessings.length)];
+            blessText.textContent = randomBlessing;
+            blessText.classList.add('text-divine-gold', 'font-semibold');
+
+            confetti({
+                particleCount: 50,
+                angle: 90,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f472b6', '#fb7185', '#f3d081']
+            });
+        }
+
+        function triggerFeatherGlow() {
+            confetti({
+                particleCount: 30,
+                spread: 50,
+                origin: { y: 0.3 },
+                colors: ['#3b82f6', '#f3d081', '#10b981']
+            });
+        }
+
+
+        /* =========================================================
+           WISH GENERATOR & LOVE NOTES
+           ========================================================= */
+        const loveWishes = [
+            "“You are my Radha—the one who brings divine harmony and pure magic to my soul.”",
+            "“Every day spent loving you feels like a sacred blessing from above.”",
+            "“May your life be as sweet as Krishna's flute and as glowing as Radha's grace.”",
+            "“I don't need the whole world; having my Radha by my side is my entire universe.”",
+            "“Wishing you endless joy, radiant health, and boundless love today and forever!”"
+        ];
+
+        function generateNewWish() {
+            const wishText = document.getElementById('wish-text');
+            const randomWish = loveWishes[Math.floor(Math.random() * loveWishes.length)];
+            
+            wishText.style.opacity = 0;
+            setTimeout(() => {
+                wishText.textContent = randomWish;
+                wishText.style.opacity = 1;
+            }, 200);
+
+            confetti({
+                particleCount: 40,
+                spread: 80,
+                origin: { y: 0.8 },
+                colors: ['#f3d081', '#f472b6']
+            });
+        }
+
+
+        /* =========================================================
+           LOVE LETTER MODAL CONTROLS
+           ========================================================= */
+        function openLoveLetter() {
+            const modal = document.getElementById('love-letter-modal');
+            modal.classList.remove('hidden');
+            confetti({
+                particleCount: 60,
+                spread: 100,
+                origin: { y: 0.5 }
+            });
+        }
+
+        function closeLoveLetter() {
+            const modal = document.getElementById('love-letter-modal');
+            modal.classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('love-letter-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLoveLetter();
+            }
+        });
+    </script>
+</body>
+</html>
